@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
+import CardHeader
+ from "react-bootstrap/esm/CardHeader";
+ import { Card } from "react-bootstrap";
 import './logIn.css'
 import axios from "axios";
 
@@ -10,10 +13,11 @@ export default function Login() {
   const nav = useNavigate();
   const [nationalId, setNationalId] = useState("");
   const [password, setPassword] = useState("");
-  // const navigation = useNavigate();
+  const navigation = useNavigate();
   function validateForm() {
     return nationalId.length > 0 && password.length > 0;
   }
+  
   function handleSubmit(e) {
     e.preventDefault();
     console.log("===================================");
@@ -25,15 +29,16 @@ export default function Login() {
       .then((response) => {
         console.log(response);
         if (response.status == 200) {
-          if (response.data.role === "Admin") {
+          if (response.data.iaAdmin === "Admin") {
             nav("/admin");
-          } else if (response.data.role === "Boss") {
-            nav("/boss");
+          } else if (response.data.isAdmin === "Admin") {
+            nav("/admin");
           } else {
-            nav("/employ");
+            nav("/user");
           }
           sessionStorage.setItem("Id", response.data.id);
         }
+        navigation("/dashboard")
       })
       .catch((err) => {
         console.log(err);
@@ -42,9 +47,11 @@ export default function Login() {
   }
   return (
     <div className="Login">
+     
       <Form onSubmit={(e)=>{handleSubmit(e)}}>
+      <Card.Header id="cardList1">Login With A Qiyas Account</Card.Header>
         <Form.Group size="lg" controlId="text">
-          <Form.Label id="h">nationalId</Form.Label>
+          <Form.Label id="h">NationalId*</Form.Label>
           <Form.Control
             autoFocus
             type="text"
@@ -53,7 +60,7 @@ export default function Login() {
           />
         </Form.Group>
         <Form.Group size="lg" controlId="password">
-          <Form.Label id="h">Password</Form.Label>
+          <Form.Label id="h">Password*</Form.Label>
           <Form.Control
             type="password"
             value={password}
@@ -64,9 +71,7 @@ export default function Login() {
           block
           size="lg"
           type="submit"
-          // disabled={!validateForm()}
-          to="/Dashboard"
-          
+          disabled={!validateForm()}
         >
           Login
         </Button>
