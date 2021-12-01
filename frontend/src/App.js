@@ -9,7 +9,7 @@ import Admin from "./components/admin/Admin";
 import SignUp from "./components/signUp/SignUp";
 
 const App = () => {
-  return (
+  return ( 
     <div>
       <Header />
       <Routes>
