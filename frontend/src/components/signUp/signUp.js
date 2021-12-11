@@ -22,7 +22,7 @@ export default function SignUp() {
         localStorage.setItem("user", JSON.stringify(obj));
 
         // localStorage.setItem("passoword",nationalId)
-        navigation("/signUp");
+        navigation("/");
       })
       .catch((err) => {
         console.log(err.response.data);

@@ -1,48 +1,77 @@
-const { users } = require("../dbUser");
+const user = require("./Users");
+const user = require("../models/user");
 
-const getAllUsers = (req, res) => {
-  res.send(users);
+module.exports = {
+  index: (req, res) => {
+    user
+      .find({})
+      .then((users) => {
+        res.json(users);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  show: (res, req) => {
+    let userId = req.params.reid;
+    user
+      .findById(userId)
+      .then((user) => {
+        res.json({ user });
+      })
+      .catch((err) => {
+        res.json({ err });
+      });
+  },
+  update: (req, res) => {
+    let userId = req.params.reid;
+    let userInfo = {
+      name: req.body.name,
+      age: req.body.age,
+      email: req.body.email,
+    };
+    user
+      .findByIdAndUpdate(userId, { $set: userInfo })
+      .then((user) => {
+        res.json({ message: "user informations has been" });
+      })
+      .catch((err) => {
+        res.json({ message: "error" });
+      });
+  },
+  delete: (req, res) => {
+    let userId = req.params.aid;
+    user
+      .findByIdAndRemove(userId)
+      .then((user) => {
+        res.json({ message: "user is deleted successfully" });
+      })
+      .catch((err) => {
+        res.json({ message: "error" });
+      });
+  },
+  create: (req, res) => {
+    let newuser = new user({
+      name: req.body.name,
+      age: req.body.age,
+      email: req.body.email,
+    });
+    user.regesture(newuser, req.body.password, (error, user) => {
+      if (user) {
+        res.json({ message: "user inserted" });
+      } else {
+        res.json({ message: "user not found" });
+      }
+    });
+    post.save(() => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json({ message: "user inserted" });
+      }
+    });
+    authenticate: (req, res) => {
+      pass.authenticate("local", (error, user) => {});
+    };
+  },
 };
-
-const addNewUser = (req, res) => {
-  const addedUser = {
-    nationalID: req.body.nationalID,
-    password: req.body.password,
-  };
-
-  users.push(addedUser);
-
-  res.status(201).send(addedUser);
-};
-
-const updateUser = (req, res) => {
-  const usersId = req.query.id;
-  users.forEach((elem, i) => {
-    if (i == usersId) {
-      elem.name = req.body.name;
-      elem.nationalID = req.body.nationalID;
-      elem.password = req.body.password;
-      elem.isAdmin = req.body.isAdmin;
-    }
-  });
-};
-const registrUser = (req, res) => {
-  const nationalId = req.query.nationalID;
-  users.forEach((elem, i) => {
-    if (i == NationalId) {
-      elem.nationalID = req.body.nationalID;
-      elem.password = req.body.password;
-      elem.dateOfBirth = req.body.dateOfBirth;
-    }
-  });
-};
-function getUser(req, res) {
-  const { nationalID, password } = req.body;
-  const foundUser = users.find((elem) => {
-    return elem.nationalID == nationalID && elem.password == password;
-  });
-  if (foundUser) res.send(foundUser);
-  else res.status(404).send("error");
-}
-
-module.exports = { getAllUsers, getUser, addNewUser, updateUser, registrUser };
