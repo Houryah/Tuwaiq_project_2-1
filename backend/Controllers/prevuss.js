@@ -1,4 +1,4 @@
-const { prevus } = require("../prevusDb");
+const { prevus } = require("../routers/prevusDb");
 
 const getAllPrevuss = (req, res) => {
   res.send(prevus);

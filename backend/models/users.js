@@ -8,7 +8,6 @@ const usersSchema = new mongoose.Schema({
   },
   nationalID: {
     type: Number,
-    unique: true,
     required: true,
     trim: true,
   },
@@ -17,10 +16,10 @@ const usersSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  isAdmin: {
-    type: Boolean,
-    required: true,
-    trim: true,
-  },
+  role: {
+    type: mongoose.SchemaTypes.ObjectId, ref:'role'},
 });
-module.exports.users = mongoose.model(users, usersSchema);
+
+
+
+module.exports.users = mongoose.model("users", usersSchema);
